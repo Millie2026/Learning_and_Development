@@ -8,103 +8,244 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --teal-dark: #1a5c5a; --teal-mid: #1e7470; --teal-light: #2a9490;
-    --teal-pale: #e8f4f4; --text-primary: #1a2e2e; --text-secondary: #4a6565;
-    --text-muted: #7a9595; --border: #d0e4e4; --border-light: #e8f0f0;
+    --teal-pale: #e8f4f4; --teal-xpale: #f0f9f9;
+    --text-primary: #1a2e2e; --text-secondary: #4a6565; --text-muted: #7a9595;
+    --border: #d0e4e4; --border-light: #e4eeee;
     --bg-secondary: #f7fbfb; --bg-tertiary: #eef6f6;
     --green-bg: #e8f4f0; --green-text: #1a5c3a;
     --amber-bg: #fef3e2; --amber-text: #7a4a0a;
     --red-bg: #fdecea; --red-text: #8b2020;
     --blue-bg: #e8f0fb; --blue-text: #1a3a7a;
+    --shadow-sm: 0 1px 4px rgba(26,92,90,0.07), 0 1px 2px rgba(26,92,90,0.04);
+    --shadow-md: 0 4px 16px rgba(26,92,90,0.10), 0 1px 4px rgba(26,92,90,0.06);
+    --shadow-lg: 0 8px 32px rgba(26,92,90,0.12), 0 2px 8px rgba(26,92,90,0.07);
   }
-  body { font-family: Georgia, serif; background: #fff; color: var(--text-primary); font-size: 15px; line-height: 1.6; }
-  .main-nav { background: #f4f6f6; border-bottom: 1px solid var(--border-light); display: flex; padding: 0 2.5rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(26,92,90,0.06); }
-  .main-nav-tab { font-size: 0.8125rem; padding: 1rem; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 500; transition: color 0.15s; }
+  body { font-family: Georgia, serif; background: #f0f5f5; color: var(--text-primary); font-size: 16px; line-height: 1.65; }
+
+  /* NAV */
+  .main-nav {
+    background: #eef4f4;
+    border-bottom: 1px solid var(--border-light);
+    display: flex; padding: 0 2.5rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(26,92,90,0.08);
+  }
+  .main-nav-tab {
+    font-size: 0.875rem; padding: 1rem 1.25rem;
+    color: var(--text-secondary); cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500; transition: color 0.15s; letter-spacing: 0.01em;
+  }
   .main-nav-tab:hover { color: var(--teal-dark); }
   .main-nav-tab.active { color: var(--teal-dark); border-bottom-color: var(--teal-mid); font-weight: 600; }
-  .body { max-width: 780px; margin: 0 auto; padding: 2rem 2.5rem 4rem; display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* BODY */
+  .body { max-width: 860px; margin: 0 auto; padding: 2rem 2.5rem 4rem; display: flex; flex-direction: column; gap: 1.5rem; }
   .section { display: none; flex-direction: column; gap: 1.25rem; }
   .section.active { display: flex; }
-  .section-intro { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 1rem 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid var(--teal-mid); }
-  .section-head { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.09em; text-transform: uppercase; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-light); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .role-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
-  .role-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
-  .role-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
-  .role-card-accent { height: 3px; margin: -1.1rem -1.25rem 1rem; border-radius: 10px 10px 0 0; }
-  .role-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 8px; }
-  .role-card-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 3px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
-  .role-card-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .role-card-badge { display: inline-block; font-size: 0.6875rem; padding: 2px 8px; border-radius: 20px; margin-top: 8px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .panel { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: none; flex-direction: column; gap: 1.125rem; }
+
+  /* SECTION INTRO */
+  .section-intro {
+    font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 1.1rem 1.25rem 1.1rem 1.5rem;
+    background: linear-gradient(135deg, #e8f4f4 0%, #f0f9f9 100%);
+    border-radius: 10px; border-left: 4px solid var(--teal-mid);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* SECTION HEAD */
+  .section-head {
+    font-size: 0.6875rem; font-weight: 700; color: var(--teal-dark);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding-bottom: 0.75rem; border-bottom: 2px solid var(--teal-pale);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .role-card {
+    background: #fff; border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 1.25rem 1.25rem 1rem;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .role-card:hover { border-color: var(--teal-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .role-card.active { border-color: var(--teal-mid); border-width: 1.5px; box-shadow: var(--shadow-md); }
+  .role-card-accent { height: 4px; margin: -1.25rem -1.25rem 1rem; border-radius: 12px 12px 0 0; }
+  .role-card-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .role-card-title { font-size: 0.9375rem; font-weight: 600; margin-bottom: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .role-card-desc { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .role-card-badge { display: inline-block; font-size: 0.6875rem; padding: 3px 9px; border-radius: 20px; margin-top: 10px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* PANEL */
+  .panel {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.75rem;
+    display: none; flex-direction: column; gap: 1.25rem;
+    box-shadow: var(--shadow-lg);
+    border-top: 4px solid var(--teal-mid);
+  }
   .panel.active { display: flex; }
   .panel-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-  .panel-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .panel-subtitle { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.65; margin-top: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .close-btn { width: 28px; height: 28px; border-radius: 6px; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 13px; color: var(--text-muted); }
-  .close-btn:hover { background: var(--bg-tertiary); }
+  .panel-title { font-size: 1.125rem; font-weight: 700; color: var(--teal-dark); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .panel-subtitle { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.65; margin-top: 5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .close-btn {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--bg-tertiary); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; font-size: 13px; color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .close-btn:hover { background: var(--border-light); color: var(--teal-dark); }
+
+  /* PILLS */
   .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
-  .pill { font-size: 0.6875rem; padding: 3px 10px; border-radius: 20px; border: 1px solid #c8d8d8; background: #edf3f3; color: #3a5555; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .sub-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-  .sub-tab { font-size: 0.75rem; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; transition: all 0.15s; }
-  .sub-tab:hover { border-color: var(--teal-light); color: var(--teal-dark); }
-  .sub-tab.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
+  .pill {
+    font-size: 0.6875rem; padding: 4px 11px; border-radius: 20px;
+    border: 1px solid #c8d8d8; background: #edf3f3; color: #3a5555;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500;
+  }
+
+  /* SUB TABS */
+  .sub-tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--bg-tertiary); padding: 6px; border-radius: 10px; }
+  .sub-tab {
+    font-size: 0.8125rem; padding: 6px 15px; border-radius: 8px;
+    border: none; background: transparent;
+    color: var(--text-secondary); cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    transition: all 0.15s; font-weight: 500;
+  }
+  .sub-tab:hover { background: #fff; color: var(--teal-dark); }
+  .sub-tab.active { background: #fff; color: var(--teal-dark); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+  /* TAB BODY */
   .tab-body { display: none; flex-direction: column; gap: 10px; }
   .tab-body.active { display: flex; }
-  .steps { display: flex; flex-direction: column; gap: 10px; }
-  .step { display: flex; gap: 10px; align-items: flex-start; }
-  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--teal-dark); color: #fff; font-size: 0.625rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .step-title { font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
-  .step-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .callout { border-left: 3px solid var(--teal-mid); padding: 0.75rem 1rem; background: #fff; border-radius: 0 8px 8px 0; }
-  .callout p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .info-box { background: var(--green-bg); border-radius: 8px; padding: 0.875rem 1rem; }
-  .info-box p { font-size: 0.75rem; color: var(--green-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .warn-box { background: var(--amber-bg); border-radius: 8px; padding: 0.875rem 1rem; }
-  .warn-box p { font-size: 0.75rem; color: var(--amber-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .alert-box { background: var(--red-bg); border-radius: 8px; padding: 0.875rem 1rem; }
-  .alert-box p { font-size: 0.75rem; color: var(--red-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .obs-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .obs-header { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
-  .obs-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .obs-outcome { font-size: 0.6875rem; font-weight: 600; padding: 2px 9px; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .obs-pass { background: var(--green-bg); color: var(--green-text); }
-  .obs-support { background: var(--amber-bg); color: var(--amber-text); }
-  .obs-body { padding: 0.875rem 1rem; }
-  .obs-body p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .obs-section-label { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .scenario-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-  .scenario-q { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border-light); }
-  .scenario-label { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .scenario-q p { font-size: 0.8125rem; line-height: 1.7; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .scenario-btn { padding: 0.75rem 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--bg-secondary); border: none; width: 100%; text-align: left; }
-  .scenario-btn:hover { background: var(--bg-tertiary); }
-  .scenario-btn-label { font-size: 0.8125rem; color: var(--teal-dark); font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .scenario-arrow { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal-light));
+    color: #fff; font-size: 0.6875rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    box-shadow: 0 2px 4px rgba(26,92,90,0.25);
+  }
+  .step-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 3px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .step-desc { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* CALLOUTS */
+  .callout {
+    border-left: 4px solid var(--teal-mid); padding: 0.875rem 1rem;
+    background: linear-gradient(135deg, #f7fbfb, #fff);
+    border-radius: 0 10px 10px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .callout p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .info-box {
+    background: linear-gradient(135deg, #e8f4f0, #f0faf5);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    border: 1px solid #b8e0cc;
+    box-shadow: var(--shadow-sm);
+  }
+  .info-box p { font-size: 0.8125rem; color: var(--green-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .warn-box {
+    background: linear-gradient(135deg, #fef3e2, #fff8ed);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    border: 1px solid #f0d090;
+    box-shadow: var(--shadow-sm);
+  }
+  .warn-box p { font-size: 0.8125rem; color: var(--amber-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .alert-box {
+    background: linear-gradient(135deg, #fdecea, #fff5f4);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    border: 1px solid #f0b0a8;
+    box-shadow: var(--shadow-sm);
+  }
+  .alert-box p { font-size: 0.8125rem; color: var(--red-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* OBSERVATION CARDS */
+  .obs-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .obs-header { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; background: var(--bg-secondary); }
+  .obs-title { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-outcome { font-size: 0.6875rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-pass { background: var(--green-bg); color: var(--green-text); border: 1px solid #b8e0cc; }
+  .obs-support { background: var(--amber-bg); color: var(--amber-text); border: 1px solid #f0d090; }
+  .obs-body { padding: 1rem; }
+  .obs-body p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-section-label { font-size: 0.6875rem; font-weight: 700; color: var(--teal-dark); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* SCENARIO */
+  .scenario-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .scenario-q { padding: 1.1rem 1.25rem; }
+  .scenario-label { font-size: 0.6875rem; font-weight: 700; color: var(--teal-mid); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-q p { font-size: 0.875rem; line-height: 1.7; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-btn {
+    padding: 0.875rem 1.25rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, var(--teal-xpale), #f7fbfb);
+    border: none; width: 100%; text-align: left;
+    border-top: 1px solid var(--border-light);
+    transition: background 0.15s;
+  }
+  .scenario-btn:hover { background: linear-gradient(135deg, var(--teal-pale), #eef8f8); }
+  .scenario-btn-label { font-size: 0.875rem; color: var(--teal-dark); font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-arrow { font-size: 0.75rem; color: var(--teal-mid); transition: transform 0.2s; }
   .scenario-arrow.open { transform: rotate(180deg); }
-  .scenario-answer { display: none; padding: 1rem 1.1rem; border-top: 1px solid var(--border-light); flex-direction: column; gap: 8px; }
+  .scenario-answer { display: none; padding: 1.1rem 1.25rem; border-top: 1px solid var(--border-light); flex-direction: column; gap: 8px; background: var(--bg-secondary); }
   .scenario-answer.open { display: flex; }
-  .scenario-answer p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .scenario-key { font-size: 0.75rem; font-weight: 600; color: var(--green-text); padding: 0.5rem 0.75rem; background: var(--green-bg); border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .process-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
-  .process-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
-  .process-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
-  .process-card-accent { height: 3px; margin: -1.1rem -1.25rem 1rem; border-radius: 10px 10px 0 0; }
-  .process-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 8px; }
-  .process-card-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 3px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
-  .process-card-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .toolkit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .toolkit-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
-  .toolkit-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
-  .toolkit-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
-  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-  .resource-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
-  .resource-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
-  .resource-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
+  .scenario-answer p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-key { font-size: 0.8125rem; font-weight: 600; color: var(--green-text); padding: 0.6rem 0.875rem; background: linear-gradient(135deg, var(--green-bg), #f0faf5); border-radius: 8px; border: 1px solid #b8e0cc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* PROCESS / TOOLKIT / RESOURCE CARDS */
+  .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .process-card {
+    background: #fff; border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 1.25rem 1.25rem 1rem;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .process-card:hover { border-color: var(--teal-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .process-card.active { border-color: var(--teal-mid); border-width: 1.5px; box-shadow: var(--shadow-md); }
+  .process-card-accent { height: 4px; margin: -1.25rem -1.25rem 1rem; border-radius: 12px 12px 0 0; }
+  .process-card-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .process-card-title { font-size: 0.9375rem; font-weight: 600; margin-bottom: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .process-card-desc { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .toolkit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .toolkit-card {
+    background: #fff; border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 1.25rem 1.25rem 1rem;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .toolkit-card:hover { border-color: var(--teal-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .toolkit-card.active { border-color: var(--teal-mid); border-width: 1.5px; box-shadow: var(--shadow-md); }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .resource-card {
+    background: #fff; border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 1.25rem 1.25rem 1rem;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .resource-card:hover { border-color: var(--teal-light); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .resource-card.active { border-color: var(--teal-mid); border-width: 1.5px; box-shadow: var(--shadow-md); }
+
+  /* MIT CONTENT */
   .mit-content { display: none; flex-direction: column; gap: 10px; }
   .mit-content.active { display: flex; }
-  .scen-box { background: var(--amber-bg); border-radius: 8px; padding: 1rem 1.1rem; }
-  .scen-box p { font-size: 0.75rem; color: var(--amber-text); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scen-box {
+    background: linear-gradient(135deg, #fef3e2, #fff8ed);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    border: 1px solid #f0d090;
+    box-shadow: var(--shadow-sm);
+  }
+  .scen-box p { font-size: 0.8125rem; color: var(--amber-text); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 </style>
 </head>
 <body>
@@ -122,19 +263,19 @@
   <div id="s-roles" class="section active">
     <div class="section-head">Role support — select your role</div>
     <div class="card-grid">
-      <div class="role-card" id="rc-coach" onclick="openRole('coach')">
-        <div class="role-card-accent" style="background:var(--teal-dark)"></div>
-        <div class="role-card-icon" style="background:var(--teal-pale)">&#128104;&#8205;&#127979;</div>
-        <div class="role-card-title">Care coach</div>
-        <div class="role-card-desc">Developing care workers through observation, feedback, and coaching.</div>
-        <span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Role guide</span>
-      </div>
       <div class="role-card" id="rc-assessor" onclick="openRole('assessor')">
         <div class="role-card-accent" style="background:#185fa5"></div>
         <div class="role-card-icon" style="background:var(--blue-bg)">&#128203;</div>
         <div class="role-card-title">Care assessor</div>
         <div class="role-card-desc">Assessments, care plans, reviews, and working with service users and families.</div>
         <span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Role guide</span>
+      </div>
+      <div class="role-card" id="rc-coach" onclick="openRole('coach')">
+        <div class="role-card-accent" style="background:var(--teal-dark)"></div>
+        <div class="role-card-icon" style="background:var(--teal-pale)">&#128104;&#8205;&#127979;</div>
+        <div class="role-card-title">Care coach</div>
+        <div class="role-card-desc">Developing care workers through observation, feedback, and coaching.</div>
+        <span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Role guide</span>
       </div>
       <div class="role-card" id="rc-coord" onclick="openRole('coord')">
         <div class="role-card-accent" style="background:#534ab7"></div>
@@ -217,7 +358,7 @@
         <div class="close-btn" onclick="closeRole('assessor')">&#10005;</div>
       </div>
       <div class="pill-row">
-        <span class="pill">New care plan assessments</span><span class="pill">Risk assessments</span><span class="pill">Six-week and six-month reviews</span><span class="pill">Welfare reviews</span><span class="pill">Specialist assessments</span><span class="pill">Family liaison</span><span class="pill">Multi-agency working</span><span class="pill">On call duties</span>
+        <span class="pill">New care plan assessments</span><span class="pill">Risk assessments</span><span class="pill">Welfare reviews</span><span class="pill">On call duties</span>
       </div>
       <div class="sub-tabs">
         <button class="sub-tab active" onclick="goSub(this,'ca-gp')">Conducting assessments</button>
@@ -256,7 +397,7 @@
         <div class="close-btn" onclick="closeRole('coord')">&#10005;</div>
       </div>
       <div class="pill-row">
-        <span class="pill">Rota management</span><span class="pill">Care plan implementation</span><span class="pill">Last-minute gaps</span><span class="pill">Electronic call monitoring</span><span class="pill">New case assessment</span><span class="pill">Staff communication</span><span class="pill">Line management of supervisors</span><span class="pill">On call duties</span>
+        <span class="pill">Rota management</span><span class="pill">Last-minute gaps</span><span class="pill">Electronic call monitoring</span><span class="pill">Staff communication</span><span class="pill">On call duties</span>
       </div>
       <div class="sub-tabs">
         <button class="sub-tab active" onclick="goSub(this,'co-gp')">Managing pressure</button>
@@ -296,10 +437,11 @@
     <div class="section-intro">Every process here follows the same steps every time. Two people may receive different outcomes — that is not inconsistency, it is fairness. The process is the constant. The outcome reflects the individual circumstances.</div>
     <div class="section-head">People processes</div>
     <div class="process-grid">
-      <div class="process-card" id="pc-ffinv" onclick="openProcess('ffinv')"><div class="process-card-accent" style="background:var(--teal-dark)"></div><div class="process-card-icon" style="background:var(--teal-pale)">&#128269;</div><div class="process-card-title">Fact find / investigation process</div><div class="process-card-desc">From concern received through to formal investigation — one continuous process.</div><span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Process guide</span></div>
-      <div class="process-card" id="pc-disc" onclick="openProcess('disc')"><div class="process-card-accent" style="background:#993c1d"></div><div class="process-card-icon" style="background:var(--red-bg)">&#128193;</div><div class="process-card-title">Disciplinary process</div><div class="process-card-desc">From informal concerns through to formal hearings and outcomes.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">Formal process</span></div>
-      <div class="process-card" id="pc-mit" onclick="openProcess('mit')"><div class="process-card-accent" style="background:#ba7517"></div><div class="process-card-icon" style="background:var(--amber-bg)">&#9878;</div><div class="process-card-title">Mitigating circumstances</div><div class="process-card-desc">Why the same mistake can lead to different outcomes.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">Key principle</span></div>
       <div class="process-card" id="pc-abs" onclick="openProcess('abs')"><div class="process-card-accent" style="background:#534ab7"></div><div class="process-card-icon" style="background:#eeedfe">&#128198;</div><div class="process-card-title">Absence management</div><div class="process-card-desc">Supporting attendance and managing persistent absence fairly.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Process guide</span></div>
+      <div class="process-card" id="pc-disc" onclick="openProcess('disc')"><div class="process-card-accent" style="background:#993c1d"></div><div class="process-card-icon" style="background:var(--red-bg)">&#128193;</div><div class="process-card-title">Disciplinary process</div><div class="process-card-desc">From informal concerns through to formal hearings and outcomes.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">Formal process</span></div>
+      <div class="process-card" id="pc-ffinv" onclick="openProcess('ffinv')"><div class="process-card-accent" style="background:var(--teal-dark)"></div><div class="process-card-icon" style="background:var(--teal-pale)">&#128269;</div><div class="process-card-title">Fact find / investigation process</div><div class="process-card-desc">From concern received through to formal investigation — one continuous process.</div><span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Process guide</span></div>
+      <div class="process-card" id="pc-griev" onclick="openProcess('griev')"><div class="process-card-accent" style="background:#185fa5"></div><div class="process-card-icon" style="background:var(--blue-bg)">&#128172;</div><div class="process-card-title">Grievance</div><div class="process-card-desc">Raising and handling workplace concerns fairly and promptly.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Formal process</span></div>
+      <div class="process-card" id="pc-mit" onclick="openProcess('mit')"><div class="process-card-accent" style="background:#ba7517"></div><div class="process-card-icon" style="background:var(--amber-bg)">&#9878;</div><div class="process-card-title">Mitigating circumstances</div><div class="process-card-desc">Why the same mistake can lead to different outcomes.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">Key principle</span></div>
     </div>
     <div id="pp-ffinv" class="panel">
       <div class="panel-header"><div><div class="panel-title">Fact find / investigation process</div><div class="panel-subtitle">A fact find is a documented discussion — not a disciplinary process. The purpose is to understand what happened and decide what, if anything, needs to follow. Where a formal investigation is needed, the same principles of fairness and impartiality apply throughout.</div></div><div class="close-btn" onclick="closeProcess('ffinv')">&#10005;</div></div>
@@ -376,7 +518,49 @@
         </div>
       </div>
     </div>
-    <div id="pp-mit" class="panel">
+    <div id="pp-griev" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Grievance</div><div class="panel-subtitle">When a grievance is raised, your role is to make sure it is heard fairly, investigated properly, and responded to promptly. This is not about finding fault — it is about taking concerns seriously and resolving them as quickly as possible.</div></div><div class="close-btn" onclick="closeProcess('griev')">&#10005;</div></div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goMit(this,'griev-receive')">When a grievance is raised</button>
+        <button class="sub-tab" onclick="goMit(this,'griev-meeting')">The grievance meeting</button>
+        <button class="sub-tab" onclick="goMit(this,'griev-outcomes')">Outcomes and appeal</button>
+        <button class="sub-tab" onclick="goMit(this,'griev-other')">Other situations</button>
+      </div>
+      <div id="griev-receive" class="mit-content active">
+        <div class="callout"><p>When a grievance is submitted, acknowledge it promptly and arrange a meeting as soon as possible — usually within seven calendar days of receiving it.</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Acknowledge receipt in writing</div><div class="step-desc">Confirm you have received the grievance and let the colleague know when they can expect to be invited to a meeting.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Appoint the right manager</div><div class="step-desc">The manager hearing the grievance must not be the subject of it and must have no prior involvement in the matter. If the grievance is about their line manager, escalate to a more senior manager.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Arrange the meeting promptly</div><div class="step-desc">Aim to hold the meeting within seven calendar days. If it needs to be rescheduled, rearrange within one week of the original date.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Confirm the right to be accompanied</div><div class="step-desc">The colleague can bring a work colleague or trade union representative to the meeting. Confirm this in the invite.</div></div></div>
+        </div>
+        <div class="info-box"><p>Grievances should be raised within one month of the issue taking place. If a grievance repeats a previous complaint where circumstances have not changed, you may decide not to hear it again.</p></div>
+      </div>
+      <div id="griev-meeting" class="mit-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Give the colleague full opportunity to set out their concern</div><div class="step-desc">Do not interrupt or jump to conclusions. Your role at this stage is to listen and understand the full picture before asking questions.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Ask clarifying questions</div><div class="step-desc">Make sure you fully understand what is being raised, what the colleague wants as an outcome, and what evidence or witnesses are relevant.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Take detailed notes throughout</div><div class="step-desc">Detailed notes must be taken during the meeting. Share them with the colleague afterwards and ask them to confirm they are accurate. The meeting must not be recorded on any device.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Carry out any further investigation needed</div><div class="step-desc">After the meeting, speak to any relevant witnesses, review any documentation, and gather the full picture before reaching an outcome.</div></div></div>
+        </div>
+      </div>
+      <div id="griev-outcomes" class="mit-content">
+        <div class="callout"><p>After the meeting and any further investigation, write to the colleague with your outcome. There are three possible outcomes:</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Grievance not upheld</div><div class="step-desc">You did not find sufficient evidence to support the grievance. Explain clearly why in the outcome letter.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Grievance fully upheld</div><div class="step-desc">You found evidence to support the grievance. Set out what action will be taken as a result.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Grievance partially upheld</div><div class="step-desc">You found evidence to support some but not all of the concerns raised. Be clear about which elements were upheld and which were not, and why.</div></div></div>
+        </div>
+        <div class="info-box"><p><strong>Right of appeal:</strong> Every outcome letter must include the right of appeal. The colleague has seven calendar days to submit an appeal. The appeal must be heard by a manager not involved in the original grievance.</p></div>
+      </div>
+      <div id="griev-other" class="mit-content">
+        <div class="callout"><p><strong>Collective grievances:</strong> Where a group of colleagues raise a grievance about the same issue, one grievance letter should be submitted on behalf of the group with all names and signatures. A spokesperson should be nominated to represent the group at the meeting.</p></div>
+        <div class="callout"><p><strong>Grievance raised during a disciplinary process:</strong> If the grievance is unrelated to the disciplinary matter, the disciplinary continues and a separate manager handles the grievance. If the two matters are connected, they may be dealt with together or the disciplinary may be paused.</p></div>
+        <div class="callout"><p><strong>Grievances from ex-colleagues:</strong> Still investigate fully, but a meeting will not always be required.</p></div>
+        <div class="warn-box"><p>If a grievance is found to contain intentionally untrue allegations, or if a colleague is treated unfairly because they raised a legitimate concern, this may be dealt with under the disciplinary process.</p></div>
+      </div>
+    </div>
+    <div id="pp-mit" class="panel"> class="panel">
       <div class="panel-header"><div><div class="panel-title">Mitigating circumstances</div><div class="panel-subtitle">Two people can make the same mistake and receive different outcomes. That is fairness, not inconsistency.</div></div><div class="close-btn" onclick="closeProcess('mit')">&#10005;</div></div>
       <div class="sub-tabs">
         <button class="sub-tab active" onclick="goMit(this,'mit-what')">What counts</button>
@@ -410,13 +594,14 @@
 
   <!-- MANAGER'S TOOLKIT -->
   <div id="s-toolkit" class="section">
-    <div class="section-intro">Managing people in a care setting is one of the most demanding jobs there is. This section is written for managers — not as policy, but as practical guidance for the situations you actually face.</div>
+    <div class="section-intro">This section is here to support you through the situations that come with managing people — practical guidance you can come back to whenever you need it.</div>
     <div class="section-head">Manager's toolkit</div>
     <div class="toolkit-grid">
-      <div class="toolkit-card" id="tc-rtw" onclick="openToolkit('rtw')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128100;</div><div class="role-card-title">Return to work</div><div class="role-card-desc">How to have a return to work conversation that is supportive and consistent.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Manager guide</span></div>
       <div class="toolkit-card" id="tc-perf" onclick="openToolkit('perf')"><div class="role-card-accent" style="background:#ba7517"></div><div class="role-card-icon" style="background:var(--amber-bg)">&#128200;</div><div class="role-card-title">Managing performance</div><div class="role-card-desc">Supporting someone who is struggling before it becomes a formal matter.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">Manager guide</span></div>
-      <div class="toolkit-card" id="tc-disc" onclick="openToolkit('disc')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#128226;</div><div class="role-card-title">Receiving a disclosure</div><div class="role-card-desc">What to do when a member of staff tells you something serious.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Manager guide</span></div>
       <div class="toolkit-card" id="tc-new" onclick="openToolkit('new')"><div class="role-card-accent" style="background:#3b6d11"></div><div class="role-card-icon" style="background:#eaf3de">&#127775;</div><div class="role-card-title">New to management</div><div class="role-card-desc">The things nobody tells you when you step into your first management role.</div><span class="role-card-badge" style="background:#eaf3de;color:#27500a">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-prob" onclick="openToolkit('prob')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128197;</div><div class="role-card-title">Probation</div><div class="role-card-desc">Managing the probationary period fairly and consistently from day one.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-disc" onclick="openToolkit('disc')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#128226;</div><div class="role-card-title">Receiving a disclosure</div><div class="role-card-desc">What to do when a member of staff tells you something serious.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-rtw" onclick="openToolkit('rtw')"><div class="role-card-accent" style="background:#993c1d"></div><div class="role-card-icon" style="background:var(--red-bg)">&#128100;</div><div class="role-card-title">Return to work</div><div class="role-card-desc">How to have a return to work conversation that is supportive and consistent.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">Manager guide</span></div>
     </div>
     <div id="tp-rtw" class="panel">
       <div class="panel-header"><div><div class="panel-title">Return to work conversations</div><div class="panel-subtitle">Every absence, however short, should be followed by a return to work conversation. Not as a deterrent — as genuine support.</div></div><div class="close-btn" onclick="closeToolkit('rtw')">&#10005;</div></div>
@@ -439,6 +624,41 @@
         <div class="step"><div class="step-num">5</div><div><div class="step-title">Review and follow up</div><div class="step-desc">Recognise improvement. If things are not improving despite genuine support, a formal process becomes appropriate — not before.</div></div></div>
       </div>
       <div class="warn-box"><p><strong>Document everything.</strong> Informal performance conversations must be recorded even if they do not go on the person's file. If the situation later escalates, you will need evidence that you tried informally first.</p></div>
+    </div>
+    <div id="tp-prob" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Probation</div><div class="panel-subtitle">The probationary period is your opportunity to support a new colleague to settle in, meet the standard, and feel confident in their role. It must be managed actively — reviews must be completed, concerns raised early, and decisions made within the six month window.</div></div><div class="close-btn" onclick="closeToolkit('prob')">&#10005;</div></div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goSubT(this,'prob-overview')">Overview</button>
+        <button class="sub-tab" onclick="goSubT(this,'prob-reviews')">Reviews</button>
+        <button class="sub-tab" onclick="goSubT(this,'prob-concerns')">If concerns arise</button>
+      </div>
+      <div id="prob-overview" class="tab-body active">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Day 1 — Employment begins</div><div class="step-desc">The colleague begins employment and completes induction and onboarding, including mandatory training, shadowing, and support from the recruitment officers.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Weeks 1—12 — Initial Be Supported Period</div><div class="step-desc">The colleague is actively supported throughout the first twelve weeks. The first probation review meeting is held at the three month mark and the PASS form is updated.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">3 months — First probation review</div><div class="step-desc">Has performance been satisfactory? If yes — proceed to final review at six months. If no — hold a second probation review meeting at four to six months and update the PASS form.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">6 months — Final probation review</div><div class="step-desc">Final probation review meeting held and PASS form updated. Confirm completion of the probationary period in writing.</div></div></div>
+        </div>
+        <div class="alert-box"><p><strong>Important:</strong> Reviews must be completed within six months of the start date. If this deadline passes without a review, the colleague passes probation by default.</p></div>
+      </div>
+      <div id="prob-reviews" class="tab-body">
+        <div class="callout"><p>Every probation review must be documented using the PASS form and updated on the system. Do not hold a verbal review without a written record.</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Prepare before the meeting</div><div class="step-desc">Review performance, attendance, feedback from the care coach or team, and any concerns raised since the last review.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Be clear about what is expected</div><div class="step-desc">The colleague must know what the standard is and whether they are meeting it. Vague feedback is not fair to them and does not protect the organisation.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Update and share the PASS form</div><div class="step-desc">Complete the PASS form during or immediately after the meeting. Share it with the colleague and keep a copy on file.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Confirm the outcome in writing</div><div class="step-desc">Whether the colleague passes, moves to an extended period, or does not pass — confirm it in writing promptly.</div></div></div>
+        </div>
+      </div>
+      <div id="prob-concerns" class="tab-body">
+        <div class="callout"><p>If performance is unsatisfactory at the three month review, do not simply hope it improves. Hold the second probation review at four to six months and be honest about what needs to change.</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Second probation review — 4 to 6 months</div><div class="step-desc">Only applies if the first review was unsatisfactory. Review performance again. If satisfactory — probation passed, confirm in writing. If not — move to the extension period.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Extended probation — 4 to 12 weeks</div><div class="step-desc">Only reached if performance was unsatisfactory at the second review. A further review is held at the end of the extension period.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Extended review outcome</div><div class="step-desc">Pass — confirm completion in writing. Fail — confirm termination in writing. Both outcomes must be confirmed promptly and handled with care.</div></div></div>
+        </div>
+        <div class="warn-box"><p>Always consult HR before confirming a decision to terminate during or at the end of probation. Do not communicate this to the colleague before doing so.</p></div>
+      </div>
     </div>
     <div id="tp-disc" class="panel">
       <div class="panel-header"><div><div class="panel-title">Receiving a disclosure</div><div class="panel-subtitle">When a member of staff tells you something serious, how you respond in that moment matters enormously.</div></div><div class="close-btn" onclick="closeToolkit('disc')">&#10005;</div></div>
@@ -466,11 +686,11 @@
   <div id="s-general" class="section">
     <div class="section-head">General resources — for every member of the team</div>
     <div class="resource-grid">
-      <div class="resource-card" id="gc-safe" onclick="openGeneral('safe')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128737;</div><div class="role-card-title">Safeguarding</div><div class="role-card-desc">Recognise, respond, record, and report — every time.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">All staff</span></div>
-      <div class="resource-card" id="gc-records" onclick="openGeneral('records')"><div class="role-card-accent" style="background:#ba7517"></div><div class="role-card-icon" style="background:var(--amber-bg)">&#128221;</div><div class="role-card-title">Record keeping</div><div class="role-card-desc">What good records look like and why they matter.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">All staff</span></div>
-      <div class="resource-card" id="gc-equality" onclick="openGeneral('equality')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#9878;</div><div class="role-card-title">Equality &amp; inclusion</div><div class="role-card-desc">Protected characteristics, inclusive practice, and fair treatment.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">All staff</span></div>
       <div class="resource-card" id="gc-comms" onclick="openGeneral('comms')"><div class="role-card-accent" style="background:#3b6d11"></div><div class="role-card-icon" style="background:#eaf3de">&#128172;</div><div class="role-card-title">Communication</div><div class="role-card-desc">Communicating clearly with service users, families, and colleagues.</div><span class="role-card-badge" style="background:#eaf3de;color:#27500a">All staff</span></div>
+      <div class="resource-card" id="gc-equality" onclick="openGeneral('equality')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#9878;</div><div class="role-card-title">Equality &amp; inclusion</div><div class="role-card-desc">Protected characteristics, inclusive practice, and fair treatment.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">All staff</span></div>
       <div class="resource-card" id="gc-mca" onclick="openGeneral('mca')"><div class="role-card-accent" style="background:var(--teal-dark)"></div><div class="role-card-icon" style="background:var(--teal-pale)">&#9878;</div><div class="role-card-title">Mental Capacity Act</div><div class="role-card-desc">Applying the MCA in day-to-day care and decision making.</div><span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">All staff</span></div>
+      <div class="resource-card" id="gc-records" onclick="openGeneral('records')"><div class="role-card-accent" style="background:#ba7517"></div><div class="role-card-icon" style="background:var(--amber-bg)">&#128221;</div><div class="role-card-title">Record keeping</div><div class="role-card-desc">What good records look like and why they matter.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">All staff</span></div>
+      <div class="resource-card" id="gc-safe" onclick="openGeneral('safe')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128737;</div><div class="role-card-title">Safeguarding</div><div class="role-card-desc">Recognise, respond, record, and report — every time.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">All staff</span></div>
       <div class="resource-card" id="gc-wb" onclick="openGeneral('wb')"><div class="role-card-accent" style="background:#993c1d"></div><div class="role-card-icon" style="background:var(--red-bg)">&#128226;</div><div class="role-card-title">Whistleblowing</div><div class="role-card-desc">Speaking up about concerns — your right and your responsibility.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">All staff</span></div>
     </div>
     <div id="gp-safe" class="panel">
@@ -538,13 +758,14 @@
     document.getElementById('s-' + id).classList.add('active');
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.role-card, .process-card, .toolkit-card, .resource-card').forEach(c => c.classList.remove('active'));
+    sendHeight();
   }
   function openRole(id) {
     document.querySelectorAll('#s-roles .panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
     document.getElementById('rp-' + id).classList.add('active');
     document.getElementById('rc-' + id).classList.add('active');
-    setTimeout(() => document.getElementById('rp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    sendHeight();
   }
   function closeRole(id) {
     document.getElementById('rp-' + id).classList.remove('active');
@@ -555,7 +776,7 @@
     document.querySelectorAll('.process-card').forEach(c => c.classList.remove('active'));
     document.getElementById('pp-' + id).classList.add('active');
     document.getElementById('pc-' + id).classList.add('active');
-    setTimeout(() => document.getElementById('pp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    sendHeight();
   }
   function closeProcess(id) {
     document.getElementById('pp-' + id).classList.remove('active');
@@ -566,7 +787,7 @@
     document.querySelectorAll('.toolkit-card').forEach(c => c.classList.remove('active'));
     document.getElementById('tp-' + id).classList.add('active');
     document.getElementById('tc-' + id).classList.add('active');
-    setTimeout(() => document.getElementById('tp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    sendHeight();
   }
   function closeToolkit(id) {
     document.getElementById('tp-' + id).classList.remove('active');
@@ -577,7 +798,7 @@
     document.querySelectorAll('.resource-card').forEach(c => c.classList.remove('active'));
     document.getElementById('gp-' + id).classList.add('active');
     document.getElementById('gc-' + id).classList.add('active');
-    setTimeout(() => document.getElementById('gp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    sendHeight();
   }
   function closeGeneral(id) {
     document.getElementById('gp-' + id).classList.remove('active');
@@ -612,7 +833,15 @@
     answer.classList.toggle('open', !isOpen);
     arrow.classList.toggle('open', !isOpen);
     label.textContent = isOpen ? 'Show guidance' : 'Hide guidance';
+    sendHeight();
   }
+  function sendHeight() {
+    setTimeout(function() {
+      var height = document.body.scrollHeight;
+      window.parent.postMessage({ type: 'resize', height: height }, '*');
+    }, 100);
+  }
+  window.addEventListener('load', sendHeight);
 </script>
 </body>
 </html>
