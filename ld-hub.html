@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning & Development Hub</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal-dark: #1a5c5a; --teal-mid: #1e7470; --teal-light: #2a9490;
+    --teal-pale: #e8f4f4; --text-primary: #1a2e2e; --text-secondary: #4a6565;
+    --text-muted: #7a9595; --border: #d0e4e4; --border-light: #e8f0f0;
+    --bg-secondary: #f7fbfb; --bg-tertiary: #eef6f6;
+    --green-bg: #e8f4f0; --green-text: #1a5c3a;
+    --amber-bg: #fef3e2; --amber-text: #7a4a0a;
+    --red-bg: #fdecea; --red-text: #8b2020;
+    --blue-bg: #e8f0fb; --blue-text: #1a3a7a;
+  }
+  body { font-family: Georgia, serif; background: #fff; color: var(--text-primary); font-size: 15px; line-height: 1.6; }
+  .main-nav { background: #f4f6f6; border-bottom: 1px solid var(--border-light); display: flex; padding: 0 2.5rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(26,92,90,0.06); }
+  .main-nav-tab { font-size: 0.8125rem; padding: 1rem; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 500; transition: color 0.15s; }
+  .main-nav-tab:hover { color: var(--teal-dark); }
+  .main-nav-tab.active { color: var(--teal-dark); border-bottom-color: var(--teal-mid); font-weight: 600; }
+  .body { max-width: 780px; margin: 0 auto; padding: 2rem 2.5rem 4rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .section { display: none; flex-direction: column; gap: 1.25rem; }
+  .section.active { display: flex; }
+  .section-intro { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 1rem 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid var(--teal-mid); }
+  .section-head { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); letter-spacing: 0.09em; text-transform: uppercase; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-light); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .role-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .role-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
+  .role-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
+  .role-card-accent { height: 3px; margin: -1.1rem -1.25rem 1rem; border-radius: 10px 10px 0 0; }
+  .role-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 8px; }
+  .role-card-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 3px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .role-card-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .role-card-badge { display: inline-block; font-size: 0.6875rem; padding: 2px 8px; border-radius: 20px; margin-top: 8px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .panel { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: none; flex-direction: column; gap: 1.125rem; }
+  .panel.active { display: flex; }
+  .panel-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .panel-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .panel-subtitle { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.65; margin-top: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .close-btn { width: 28px; height: 28px; border-radius: 6px; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 13px; color: var(--text-muted); }
+  .close-btn:hover { background: var(--bg-tertiary); }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill { font-size: 0.6875rem; padding: 3px 10px; border-radius: 20px; border: 1px solid #c8d8d8; background: #edf3f3; color: #3a5555; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .sub-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sub-tab { font-size: 0.75rem; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; transition: all 0.15s; }
+  .sub-tab:hover { border-color: var(--teal-light); color: var(--teal-dark); }
+  .sub-tab.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
+  .tab-body { display: none; flex-direction: column; gap: 10px; }
+  .tab-body.active { display: flex; }
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step { display: flex; gap: 10px; align-items: flex-start; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--teal-dark); color: #fff; font-size: 0.625rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .step-title { font-size: 0.8125rem; font-weight: 600; margin-bottom: 2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .step-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .callout { border-left: 3px solid var(--teal-mid); padding: 0.75rem 1rem; background: #fff; border-radius: 0 8px 8px 0; }
+  .callout p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .info-box { background: var(--green-bg); border-radius: 8px; padding: 0.875rem 1rem; }
+  .info-box p { font-size: 0.75rem; color: var(--green-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .warn-box { background: var(--amber-bg); border-radius: 8px; padding: 0.875rem 1rem; }
+  .warn-box p { font-size: 0.75rem; color: var(--amber-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .alert-box { background: var(--red-bg); border-radius: 8px; padding: 0.875rem 1rem; }
+  .alert-box p { font-size: 0.75rem; color: var(--red-text); line-height: 1.65; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .obs-header { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
+  .obs-title { font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-outcome { font-size: 0.6875rem; font-weight: 600; padding: 2px 9px; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-pass { background: var(--green-bg); color: var(--green-text); }
+  .obs-support { background: var(--amber-bg); color: var(--amber-text); }
+  .obs-body { padding: 0.875rem 1rem; }
+  .obs-body p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .obs-section-label { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .scenario-q { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border-light); }
+  .scenario-label { font-size: 0.6875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-q p { font-size: 0.8125rem; line-height: 1.7; color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-btn { padding: 0.75rem 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--bg-secondary); border: none; width: 100%; text-align: left; }
+  .scenario-btn:hover { background: var(--bg-tertiary); }
+  .scenario-btn-label { font-size: 0.8125rem; color: var(--teal-dark); font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-arrow { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
+  .scenario-arrow.open { transform: rotate(180deg); }
+  .scenario-answer { display: none; padding: 1rem 1.1rem; border-top: 1px solid var(--border-light); flex-direction: column; gap: 8px; }
+  .scenario-answer.open { display: flex; }
+  .scenario-answer p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .scenario-key { font-size: 0.75rem; font-weight: 600; color: var(--green-text); padding: 0.5rem 0.75rem; background: var(--green-bg); border-radius: 6px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .process-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .process-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
+  .process-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
+  .process-card-accent { height: 3px; margin: -1.1rem -1.25rem 1rem; border-radius: 10px 10px 0 0; }
+  .process-card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 8px; }
+  .process-card-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 3px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .process-card-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .toolkit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .toolkit-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .toolkit-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
+  .toolkit-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
+  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .resource-card { background: #fff; border: 1px solid var(--border-light); border-radius: 10px; padding: 1.1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .resource-card:hover { border-color: var(--teal-light); box-shadow: 0 2px 8px rgba(26,116,112,0.08); }
+  .resource-card.active { border-color: var(--teal-mid); border-width: 1.5px; }
+  .mit-content { display: none; flex-direction: column; gap: 10px; }
+  .mit-content.active { display: flex; }
+  .scen-box { background: var(--amber-bg); border-radius: 8px; padding: 1rem 1.1rem; }
+  .scen-box p { font-size: 0.75rem; color: var(--amber-text); line-height: 1.75; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="main-nav">
+  <div class="main-nav-tab active" onclick="goMain('roles', this)">Role support</div>
+  <div class="main-nav-tab" onclick="goMain('people', this)">People processes</div>
+  <div class="main-nav-tab" onclick="goMain('toolkit', this)">Manager's toolkit</div>
+  <div class="main-nav-tab" onclick="goMain('general', this)">General resources</div>
+</div>
+
+<div class="body">
+
+  <!-- ROLE SUPPORT -->
+  <div id="s-roles" class="section active">
+    <div class="section-head">Role support — select your role</div>
+    <div class="card-grid">
+      <div class="role-card" id="rc-coach" onclick="openRole('coach')">
+        <div class="role-card-accent" style="background:var(--teal-dark)"></div>
+        <div class="role-card-icon" style="background:var(--teal-pale)">&#128104;&#8205;&#127979;</div>
+        <div class="role-card-title">Care coach</div>
+        <div class="role-card-desc">Developing care workers through observation, feedback, and coaching.</div>
+        <span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Role guide</span>
+      </div>
+      <div class="role-card" id="rc-assessor" onclick="openRole('assessor')">
+        <div class="role-card-accent" style="background:#185fa5"></div>
+        <div class="role-card-icon" style="background:var(--blue-bg)">&#128203;</div>
+        <div class="role-card-title">Care assessor</div>
+        <div class="role-card-desc">Assessments, care plans, reviews, and working with service users and families.</div>
+        <span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Role guide</span>
+      </div>
+      <div class="role-card" id="rc-coord" onclick="openRole('coord')">
+        <div class="role-card-accent" style="background:#534ab7"></div>
+        <div class="role-card-icon" style="background:#eeedfe">&#128197;</div>
+        <div class="role-card-title">Coordinator</div>
+        <div class="role-card-desc">Managing rotas, covering gaps, and keeping services running safely.</div>
+        <span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Role guide</span>
+      </div>
+    </div>
+
+    <!-- CARE COACH -->
+    <div id="rp-coach" class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Care coach</div>
+          <div class="panel-subtitle">As a care coach, you play a key part in helping our care workers be the best they can be. This is not about telling people what to do — it is about understanding their challenges, creating space for reflection, and supporting them to improve.</div>
+        </div>
+        <div class="close-btn" onclick="closeRole('coach')">&#10005;</div>
+      </div>
+      <div class="pill-row">
+        <span class="pill">Observation visits</span><span class="pill">Skill gap identification</span><span class="pill">Coaching conversations</span><span class="pill">Structured feedback</span><span class="pill">Development planning</span><span class="pill">Escalation of concerns</span>
+      </div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goSub(this,'cc-gp')">Good practice</button>
+        <button class="sub-tab" onclick="goSub(this,'cc-dc')">Difficult conversations</button>
+        <button class="sub-tab" onclick="goSub(this,'cc-ro')">Recording observations</button>
+        <button class="sub-tab" onclick="goSub(this,'cc-sc')">Scenario</button>
+      </div>
+      <div id="cc-gp" class="tab-body active">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Observe without intervening</div><div class="step-desc">Unless there is immediate risk, let the care worker work. Your job at this stage is to watch, not guide.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Ask before you tell</div><div class="step-desc">Begin every feedback conversation by asking what the care worker thought went well and what they would do differently.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Be specific, not general</div><div class="step-desc">"When you supported Mrs Jones I noticed you moved quickly without checking she was ready" is more useful than "you seemed rushed."</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Agree next steps together</div><div class="step-desc">Actions the care worker has agreed to are more likely to be followed through than actions handed to them.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Follow up</div><div class="step-desc">Check in at the next visit. Did they try what you agreed? This closes the loop and builds trust over time.</div></div></div>
+        </div>
+        <div class="alert-box"><p><strong>Escalate immediately</strong> if there is any risk to the safety or dignity of a service user, a safeguarding concern of any kind, or a pattern of poor practice that has not improved despite coaching. Some situations need a manager — recognising that is part of doing the role well.</p></div>
+      </div>
+      <div id="cc-dc" class="tab-body">
+        <div class="callout"><p>Frame concerns around the impact on the service user, not a judgement of the person. "I want to talk about what I observed because it could affect Mrs Jones's safety" lands very differently to "that wasn't good enough."</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Choose the right moment</div><div class="step-desc">Not in front of the service user or other staff.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Describe what you saw, not what you think it means</div><div class="step-desc">Stick to what was observable.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Give them the opportunity to respond</div><div class="step-desc">There may be context you are not aware of.</div></div></div>
+        </div>
+      </div>
+      <div id="cc-ro" class="tab-body">
+        <div class="callout"><p>Observation records must be factual, specific, and evidence-based. Write what you observed — not your general impression. The record should clearly show the outcome, what was done well, what needs improvement, and what happens next.</p></div>
+        <div class="obs-section-label">Medication observation examples</div>
+        <div class="obs-card">
+          <div class="obs-header"><div class="obs-title">Medication administration</div><span class="obs-outcome obs-pass">Passed</span></div>
+          <div class="obs-body"><p>Care worker administered medication correctly, following the six rights and demonstrating safe, person-centred practice. She appeared confident and competent throughout the process and completed records accurately. Her answers to follow-up questions showed a strong understanding of medication procedures in general. Overall, she showed good awareness and professionalism in both practical and verbal aspects of the assessment.</p></div>
+        </div>
+        <div class="obs-card">
+          <div class="obs-header"><div class="obs-title">Medication administration</div><span class="obs-outcome obs-support">Further support required</span></div>
+          <div class="obs-body"><p>The care worker demonstrated an initial good understanding of medication administration and followed the six rights, though prompting was required during parts of the process. Guidance was needed around PRN protocols, as a PRN medication was incorrectly recorded as refused. I also addressed the correct use of the non-touch technique, as medication was popped directly into the client's hand. Responses to follow-up questions showed some uncertainty, particularly around disposal procedures and error reporting. With further support and refresher training, the care worker is likely to build confidence and consistency in safe practice. I have contacted the office with recommendations.</p></div>
+        </div>
+      </div>
+      <div id="cc-sc" class="tab-body">
+        <div class="scenario-card">
+          <div class="scenario-q"><div class="scenario-label">Situation</div><p>You are observing a new care worker during a moving and handling task. They are clearly hesitant — pausing frequently, not using the equipment with confidence, and visibly anxious. The service user picks up on it and becomes unsettled. Afterwards the care worker says they are not sure they are doing it right but did not want to say anything. What do you do?</p></div>
+          <button class="scenario-btn" onclick="toggleScenario(this)"><span class="scenario-btn-label">Show guidance</span><span class="scenario-arrow">&#9660;</span></button>
+          <div class="scenario-answer">
+            <p>The care worker has done the right thing by being honest afterwards — that matters and should be acknowledged. However, hesitancy during a moving and handling task is a safety concern that needs to be addressed before they carry out the task alone again.</p>
+            <p>Start by asking them to reflect on how they felt and what specifically they were unsure about. This gives you a clearer picture of whether it is a knowledge gap, a confidence issue, or both. Be honest that what you observed was not safe enough yet — but frame it as something you are going to work on together, not a failure.</p>
+            <p>Do not sign off the observation. Arrange a further practice session with the right equipment and support before they work unsupported. Record everything on Carefree and contact the office with your recommendations.</p>
+            <div class="scenario-key">&#10003; Acknowledge the honesty, address the safety concern, arrange further support before they work unsupported.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARE ASSESSOR -->
+    <div id="rp-assessor" class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Care assessor</div>
+          <div class="panel-subtitle">As a care assessor, you play a key part in making sure service users receive the right care. The role goes beyond completing assessments — it is about working with service users, their families, and the wider team to truly understand what people need and making sure that is reflected in their care.</div>
+        </div>
+        <div class="close-btn" onclick="closeRole('assessor')">&#10005;</div>
+      </div>
+      <div class="pill-row">
+        <span class="pill">New care plan assessments</span><span class="pill">Risk assessments</span><span class="pill">Six-week and six-month reviews</span><span class="pill">Welfare reviews</span><span class="pill">Specialist assessments</span><span class="pill">Family liaison</span><span class="pill">Multi-agency working</span><span class="pill">On call duties</span>
+      </div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goSub(this,'ca-gp')">Conducting assessments</button>
+        <button class="sub-tab" onclick="goSub(this,'ca-sc')">Scenario</button>
+      </div>
+      <div id="ca-gp" class="tab-body active">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Prepare before you arrive</div><div class="step-desc">Review existing information, understand the referral reason, and know any risks or sensitivities.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Build rapport first</div><div class="step-desc">A comfortable person gives a far more accurate picture of their real needs.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Involve the person in the plan</div><div class="step-desc">The care plan must be agreed with the person, not written for them.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Implement any actions and book the next review before you leave</div><div class="step-desc">Do not leave it to be arranged later.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Complete all documentation on the day</div><div class="step-desc">Care plans, notes, and actions should be clear and accurate enough that anyone reviewing them has a full picture of the service user's needs.</div></div></div>
+        </div>
+        <div class="alert-box"><p><strong>Escalate immediately</strong> if a service user's needs have changed significantly, a safeguarding concern arises, or a situation requires urgent action. Do not sit on concerns — the sooner they are raised, the sooner they can be addressed.</p></div>
+      </div>
+      <div id="ca-sc" class="tab-body">
+        <div class="scenario-card">
+          <div class="scenario-q"><div class="scenario-label">Situation</div><p>You arrive for a six-week review. The service user's daughter is present and is doing most of the talking, answering questions on behalf of her mother. The service user appears to have capacity but seems reluctant to speak. What do you do?</p></div>
+          <button class="scenario-btn" onclick="toggleScenario(this)"><span class="scenario-btn-label">Show guidance</span><span class="scenario-arrow">&#9660;</span></button>
+          <div class="scenario-answer">
+            <p>The care plan must reflect what the service user wants — not what their family wants for them. Politely redirect the conversation back to the service user. Address questions directly to her, give her time to respond, and if needed ask the daughter if she would mind giving you a few minutes alone with her mother.</p>
+            <p>If the service user then communicates something different to what the daughter has been saying, that is significant and must be reflected in the care plan and escalated to your manager. Record everything accurately on Carefree.</p>
+            <div class="scenario-key">&#10003; The service user's voice comes first — always.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COORDINATOR -->
+    <div id="rp-coord" class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Coordinator</div>
+          <div class="panel-subtitle">As a coordinator, you play a key part in making sure the service runs smoothly — managing rotas, responding to last minute changes, and making sure service users receive their care safely and on time.</div>
+        </div>
+        <div class="close-btn" onclick="closeRole('coord')">&#10005;</div>
+      </div>
+      <div class="pill-row">
+        <span class="pill">Rota management</span><span class="pill">Care plan implementation</span><span class="pill">Last-minute gaps</span><span class="pill">Electronic call monitoring</span><span class="pill">New case assessment</span><span class="pill">Staff communication</span><span class="pill">Line management of supervisors</span><span class="pill">On call duties</span>
+      </div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goSub(this,'co-gp')">Managing pressure</button>
+        <button class="sub-tab" onclick="goSub(this,'co-cm')">Communication</button>
+        <button class="sub-tab" onclick="goSub(this,'co-sc')">Scenario</button>
+      </div>
+      <div id="co-gp" class="tab-body active">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Triage by risk</div><div class="step-desc">Rank outstanding issues by potential harm to a service user. Work through in order, not the order things arrive.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Communicate gaps early</div><div class="step-desc">If a call cannot be covered, escalate to the manager immediately.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Document every significant decision</div><div class="step-desc">A brief note at the time protects you and supports handover.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Stay calm on the outside</div><div class="step-desc">Care workers need to arrive at calls focused on the service user. Be steady, brief, and clear.</div></div></div>
+        </div>
+        <div class="alert-box"><p><strong>Escalate immediately</strong> if a high-risk call cannot be covered, a safeguarding concern is raised, or a service user cannot be contacted and welfare is uncertain. When in doubt, escalate — it is always better to raise something that turns out to be nothing than to sit on something that matters.</p></div>
+      </div>
+      <div id="co-cm" class="tab-body">
+        <div class="callout"><p>With care workers: be clear, direct, and respectful. Give them what they need without unnecessary detail.</p></div>
+        <div class="callout"><p>With service users and families: be honest and calm — if there is a delay, tell them early. An explanation in advance is far better received than an apology after.</p></div>
+        <div class="callout"><p>When escalating: give the situation, what you have already tried, and what you need. "Mrs Jones's 9am call is uncovered, I have tried all available staff, I need a decision" is more useful than "I can't sort this."</p></div>
+      </div>
+      <div id="co-sc" class="tab-body">
+        <div class="scenario-card">
+          <div class="scenario-q"><div class="scenario-label">Situation</div><p>It is 7:45am. A care worker has not shown up for their 7am call with a service user who requires medication support. You cannot reach the care worker, have no available cover, and the manager is not answering their phone. What do you do?</p></div>
+          <button class="scenario-btn" onclick="toggleScenario(this)"><span class="scenario-btn-label">Show guidance</span><span class="scenario-arrow">&#9660;</span></button>
+          <div class="scenario-answer">
+            <p>Contact the service user or their family immediately to make them aware of the delay and check their welfare. Do not leave them without information.</p>
+            <p>Keep trying the manager through every available channel — mobile, office line, email. If there is an on-call number or a deputy, use it now. Log every attempt with the time. If you genuinely cannot reach anyone and the service user's safety is at risk, escalate further — and if necessary consider whether emergency services need to be involved. Document every decision and the time it was made.</p>
+            <div class="scenario-key">&#10003; Contact the service user first, exhaust every escalation route, document everything.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEOPLE PROCESSES -->
+  <div id="s-people" class="section">
+    <div class="section-intro">Every process here follows the same steps every time. Two people may receive different outcomes — that is not inconsistency, it is fairness. The process is the constant. The outcome reflects the individual circumstances.</div>
+    <div class="section-head">People processes</div>
+    <div class="process-grid">
+      <div class="process-card" id="pc-ffinv" onclick="openProcess('ffinv')"><div class="process-card-accent" style="background:var(--teal-dark)"></div><div class="process-card-icon" style="background:var(--teal-pale)">&#128269;</div><div class="process-card-title">Fact find / investigation process</div><div class="process-card-desc">From concern received through to formal investigation — one continuous process.</div><span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">Process guide</span></div>
+      <div class="process-card" id="pc-disc" onclick="openProcess('disc')"><div class="process-card-accent" style="background:#993c1d"></div><div class="process-card-icon" style="background:var(--red-bg)">&#128193;</div><div class="process-card-title">Disciplinary process</div><div class="process-card-desc">From informal concerns through to formal hearings and outcomes.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">Formal process</span></div>
+      <div class="process-card" id="pc-mit" onclick="openProcess('mit')"><div class="process-card-accent" style="background:#ba7517"></div><div class="process-card-icon" style="background:var(--amber-bg)">&#9878;</div><div class="process-card-title">Mitigating circumstances</div><div class="process-card-desc">Why the same mistake can lead to different outcomes.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">Key principle</span></div>
+      <div class="process-card" id="pc-abs" onclick="openProcess('abs')"><div class="process-card-accent" style="background:#534ab7"></div><div class="process-card-icon" style="background:#eeedfe">&#128198;</div><div class="process-card-title">Absence management</div><div class="process-card-desc">Supporting attendance and managing persistent absence fairly.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Process guide</span></div>
+    </div>
+    <div id="pp-ffinv" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Fact find / investigation process</div><div class="panel-subtitle">A fact find is a documented discussion — not a disciplinary process. The purpose is to understand what happened and decide what, if anything, needs to follow. Where a formal investigation is needed, the same principles of fairness and impartiality apply throughout.</div></div><div class="close-btn" onclick="closeProcess('ffinv')">&#10005;</div></div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goMit(this,'ffinv-ff')">Fact find</button>
+        <button class="sub-tab" onclick="goMit(this,'ffinv-inv')">Formal investigation</button>
+      </div>
+      <div id="ffinv-ff" class="mit-content active">
+        <div class="callout"><p>A fact find is a documented discussion. It is informal — no formal rights apply — but it must be respectful and the person must not feel ambushed. Its purpose is to understand, not to conclude.</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Identify the concern clearly</div><div class="step-desc">Write down the specific concern before speaking to anyone. Vague concerns produce vague fact finds.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Gather initial information</div><div class="step-desc">Review records, rotas, care notes. Speak to witnesses if necessary. Keep accurate notes throughout.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Meet with the individual</div><div class="step-desc">Give them the opportunity to explain. Document the conversation. This is the fact find meeting — keep it focused and factual.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Consider the full context</div><div class="step-desc">Workload, supervision history, personal circumstances, training received, whether expectations were clearly communicated.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Decide and record next steps</div><div class="step-desc">Can it be resolved informally? If yes — agree actions, document, and review. If no — escalate to a formal investigation. Record your reasoning either way.</div></div></div>
+        </div>
+        <div class="info-box"><p><strong>Informal resolution:</strong> Where a concern can be addressed without formal process — coaching, additional training, an agreed action plan — document it and set a review date. No further action needed if it resolves.</p></div>
+        <div class="alert-box"><p>Never allow a fact find to become an informal disciplinary by the back door. Do not communicate a view about likely outcome to the individual during this stage.</p></div>
+      </div>
+      <div id="ffinv-inv" class="mit-content">
+        <div class="callout"><p>A formal investigation is triggered when the fact find suggests there may be a case to answer that cannot be resolved informally. The investigator's role is to establish the facts — not to decide the outcome.</p></div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Appoint an impartial investigator</div><div class="step-desc">Someone with no prior involvement in the matter. This is not optional.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Set the terms of reference</div><div class="step-desc">Define clearly what is being investigated before it begins. Scope creep is one of the most common reasons investigations are challenged.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Notify the individual in writing</div><div class="step-desc">They must know the investigation is taking place, what it concerns, and who the investigator is.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Conduct witness interviews</div><div class="step-desc">Open, non-leading questions. Record accurately. Allow interviewees to review their account.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Compile the investigation report</div><div class="step-desc">Findings of fact only. No sanction recommendations — that is for the hearing manager who comes to the case fresh.</div></div></div>
+        </div>
+        <div class="info-box"><p><strong>Key principle:</strong> The same process applies every time — regardless of who is involved. This consistency is what makes the process defensible and fair.</p></div>
+      </div>
+    </div>
+    <div id="pp-disc" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Disciplinary process</div><div class="panel-subtitle">A structured four-step process for addressing conduct or performance concerns fairly and consistently.</div></div><div class="close-btn" onclick="closeProcess('disc')">&#10005;</div></div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goMit(this,'disc-1')">Step 1 — Prepare and invite</button>
+        <button class="sub-tab" onclick="goMit(this,'disc-2')">Step 2 — Disciplinary hearing</button>
+        <button class="sub-tab" onclick="goMit(this,'disc-3')">Step 3 — Weigh up and decide</button>
+        <button class="sub-tab" onclick="goMit(this,'disc-4')">Step 4 — Confirm in writing</button>
+      </div>
+      <div id="disc-1" class="mit-content active">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Send written invite clearly stating the allegations</div><div class="step-desc">The individual must know exactly what they are being asked to attend and what the allegations are before the hearing takes place.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Include a copy of the disciplinary policy and full evidence pack</div><div class="step-desc">They must have sight of all evidence that will be referred to in the hearing.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Give reasonable notice — minimum 48 hours</div><div class="step-desc">The individual must have adequate time to prepare their response and arrange a companion if they wish.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Inform of right to bring a companion</div><div class="step-desc">They have the right to be accompanied by a colleague or trade union representative.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Confirm a note taker will be present</div><div class="step-desc">A note taker must be present throughout the hearing. This is separate from the chair.</div></div></div>
+        </div>
+      </div>
+      <div id="disc-2" class="mit-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Chair must be of appropriate seniority</div><div class="step-desc">The hearing must be chaired by someone with the authority to make the decision and with no prior involvement in the investigation.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Go through allegations and all evidence gathered</div><div class="step-desc">Present the allegations and evidence clearly and in full before asking the individual to respond.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Give the colleague full opportunity to respond</div><div class="step-desc">The individual must have genuine opportunity to respond to each allegation and present their account. Do not rush this stage.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Allow companion to make representations but not answer questions</div><div class="step-desc">The companion can support and speak on behalf of the individual but cannot answer questions directed at them.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Take detailed notes — share with colleague and confirm they are happy</div><div class="step-desc">Notes must be a full and accurate record of what was said. Share them with the individual after the hearing and ask them to confirm they are accurate.</div></div></div>
+        </div>
+      </div>
+      <div id="disc-3" class="mit-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Review all evidence carefully after the hearing</div><div class="step-desc">Do not make a decision during the hearing itself. Take time to consider everything properly.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Consider the colleague's response and any mitigating circumstances</div><div class="step-desc">What did they say in response to the allegations? Are there any factors that genuinely contextualise the conduct?</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Consider any previous disciplinary history</div><div class="step-desc">Review any live warnings or previous matters that are relevant to the decision.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Consult HR before confirming outcome</div><div class="step-desc">Always consult HR before communicating the decision. Do not confirm an outcome to the individual before doing so.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Decision must be made within 7 working days of the hearing</div><div class="step-desc">Do not leave the individual waiting unnecessarily. Aim to communicate the decision as soon as possible within the 7 working day window.</div></div></div>
+        </div>
+      </div>
+      <div id="disc-4" class="mit-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Confirm decision and reasons in writing within one week</div><div class="step-desc">The outcome letter must be issued within one week of the hearing. It must clearly state the decision and the reasoning behind it.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">State the nature of the complaint and required standards</div><div class="step-desc">Be clear about what the conduct concern was and what standard of behaviour or performance is expected going forward.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Include timescales for improvement where applicable</div><div class="step-desc">Where the outcome includes an expectation of improvement, set out clearly what is expected and by when.</div></div></div>
+          <div class="step"><div class="step-num">4</div><div><div class="step-title">Place record on personnel file</div><div class="step-desc">The outcome letter and hearing record must be placed on the individual's personnel file.</div></div></div>
+          <div class="step"><div class="step-num">5</div><div><div class="step-title">Inform of right to appeal within 5 working days</div><div class="step-desc">Every formal outcome must include the right of appeal. The individual has 5 working days to submit an appeal. The appeal must be heard by someone not involved in the original hearing.</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div id="pp-mit" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Mitigating circumstances</div><div class="panel-subtitle">Two people can make the same mistake and receive different outcomes. That is fairness, not inconsistency.</div></div><div class="close-btn" onclick="closeProcess('mit')">&#10005;</div></div>
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="goMit(this,'mit-what')">What counts</button>
+        <button class="sub-tab" onclick="goMit(this,'mit-ex')">Worked example</button>
+        <button class="sub-tab" onclick="goMit(this,'mit-not')">What doesn't count</button>
+        <button class="sub-tab" onclick="goMit(this,'mit-pr')">In practice</button>
+      </div>
+      <div id="mit-what" class="mit-content active"><div class="callout"><p>Length of service and clean record; personal circumstances such as bereavement or illness; whether the person self-reported; whether they accepted responsibility early; gaps in training or unclear expectations; workload pressures beyond their control.</p></div></div>
+      <div id="mit-ex" class="mit-content"><div class="scen-box"><p><strong>Same mistake — two different outcomes</strong><br><br>Two care workers both fail to complete handover notes on the same shift.<br><br>Worker A has eight years of service, no previous warnings, was going through a bereavement, flagged it the next morning, and immediately accepted responsibility.<br><br>Worker B has three formal warnings in twelve months, was aware of the requirement, had refresher training six weeks prior, and offered no explanation.<br><br>The process is identical. The outcome is different. That is not inconsistency — it is the process working exactly as it should.</p></div></div>
+      <div id="mit-not" class="mit-content"><div class="callout"><p>Claiming ignorance of a rule clearly communicated and signed off does not mitigate. An account inconsistent with witness evidence does not mitigate. Attributing blame to colleagues without evidence does not mitigate.</p></div><div class="callout"><p>The test: does this factor genuinely explain why the conduct occurred — or is it an attempt to avoid accountability? Explanation is not the same as excuse.</p></div></div>
+      <div id="mit-pr" class="mit-content">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Ask directly in the hearing</div><div class="step-desc">Specifically invite the individual to share anything they want you to take into account. Do not assume they will raise it themselves.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">Consider it genuinely before deciding</div><div class="step-desc">Mitigating circumstances must be weighed before the decision — not noted afterwards as a formality.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Record your reasoning</div><div class="step-desc">Your outcome letter must explain what was raised, how you weighed it, and how it influenced your decision. This is what makes the outcome defensible.</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div id="pp-abs" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Absence management</div><div class="panel-subtitle">Supporting people back to work and managing attendance consistently — not penalising people for being unwell.</div></div><div class="close-btn" onclick="closeProcess('abs')">&#10005;</div></div>
+      <div class="info-box"><p><strong>Trigger point:</strong> 3 absences in a rolling six month period triggers an absence review meeting. This is not a disciplinary — it is a supportive conversation to understand what is happening and agree what support is needed.</p></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Return to work conversation</div><div class="step-desc">On the first day back after every absence, however short. Supportive, not disciplinary. Welcome the person back, note the reason, consider whether any adjustments are needed. Always record it.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Absence review meeting — triggered at 3 in a rolling six months</div><div class="step-desc">Meet with the individual to explore the reasons behind the absences. Listen, ask open questions, and consider whether there is an underlying issue — health, personal circumstances, or something work-related. Document the meeting and agree any support or actions.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Review and monitor</div><div class="step-desc">Follow up on any agreed actions. If absence reduces, acknowledge it. If the pattern continues, make clear that further absence may trigger the next stage.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Escalation — a further 3 absences</div><div class="step-desc">Where absence continues to a further 3 in the rolling period despite support, the process escalates. This may move toward a formal stage. Written invitation, right to be accompanied, right of appeal.</div></div></div>
+      </div>
+      <div class="warn-box"><p><strong>Equality Act:</strong> Always assess whether absence may be linked to a disability before taking formal action. If it is, reasonable adjustments must be explored and documented first.</p></div>
+    </div>
+  </div>
+
+  <!-- MANAGER'S TOOLKIT -->
+  <div id="s-toolkit" class="section">
+    <div class="section-intro">Managing people in a care setting is one of the most demanding jobs there is. This section is written for managers — not as policy, but as practical guidance for the situations you actually face.</div>
+    <div class="section-head">Manager's toolkit</div>
+    <div class="toolkit-grid">
+      <div class="toolkit-card" id="tc-rtw" onclick="openToolkit('rtw')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128100;</div><div class="role-card-title">Return to work</div><div class="role-card-desc">How to have a return to work conversation that is supportive and consistent.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-perf" onclick="openToolkit('perf')"><div class="role-card-accent" style="background:#ba7517"></div><div class="role-card-icon" style="background:var(--amber-bg)">&#128200;</div><div class="role-card-title">Managing performance</div><div class="role-card-desc">Supporting someone who is struggling before it becomes a formal matter.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-disc" onclick="openToolkit('disc')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#128226;</div><div class="role-card-title">Receiving a disclosure</div><div class="role-card-desc">What to do when a member of staff tells you something serious.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">Manager guide</span></div>
+      <div class="toolkit-card" id="tc-new" onclick="openToolkit('new')"><div class="role-card-accent" style="background:#3b6d11"></div><div class="role-card-icon" style="background:#eaf3de">&#127775;</div><div class="role-card-title">New to management</div><div class="role-card-desc">The things nobody tells you when you step into your first management role.</div><span class="role-card-badge" style="background:#eaf3de;color:#27500a">Manager guide</span></div>
+    </div>
+    <div id="tp-rtw" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Return to work conversations</div><div class="panel-subtitle">Every absence, however short, should be followed by a return to work conversation. Not as a deterrent — as genuine support.</div></div><div class="close-btn" onclick="closeToolkit('rtw')">&#10005;</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Welcome them back genuinely</div><div class="step-desc">Start by saying you are glad they are back. It sounds simple, but it matters — particularly for someone anxious about returning.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Ask how they are — properly</div><div class="step-desc">Not just "are you fit for work?" Some people return before they are truly ready. Create space for that conversation.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Note the reason for absence</div><div class="step-desc">Record what they tell you. You are not a doctor — record what was said and leave it at that unless a pattern is emerging.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Consider whether adjustments are needed</div><div class="step-desc">Particularly after a longer absence or one related to a health condition.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><div class="step-title">Brief them on anything they have missed</div><div class="step-desc">What has changed? Is there anything they need to know before they go back out?</div></div></div>
+      </div>
+      <div class="callout"><p>The return to work conversation is not an interrogation and should never feel like one. Its purpose is support and connection — the monitoring function is secondary.</p></div>
+    </div>
+    <div id="tp-perf" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Managing performance</div><div class="panel-subtitle">Most performance issues can be resolved without a formal process — if addressed early, honestly, and with genuine support.</div></div><div class="close-btn" onclick="closeToolkit('perf')">&#10005;</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Name the concern early</div><div class="step-desc">The longer you leave it, the harder it becomes — and the more unfair it is to the person. If you have noticed something, say something.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Be clear about what good looks like</div><div class="step-desc">"You need to be better at communication" is not a standard. "Handover notes must be completed before the end of every shift" is.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Explore what is getting in the way</div><div class="step-desc">Is it a skill issue or a will issue? Someone who does not know how needs training. Someone who knows but chooses not to is a different conversation.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Set out a support plan</div><div class="step-desc">What are you going to do to help them improve? What does success look like and by when?</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><div class="step-title">Review and follow up</div><div class="step-desc">Recognise improvement. If things are not improving despite genuine support, a formal process becomes appropriate — not before.</div></div></div>
+      </div>
+      <div class="warn-box"><p><strong>Document everything.</strong> Informal performance conversations must be recorded even if they do not go on the person's file. If the situation later escalates, you will need evidence that you tried informally first.</p></div>
+    </div>
+    <div id="tp-disc" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Receiving a disclosure</div><div class="panel-subtitle">When a member of staff tells you something serious, how you respond in that moment matters enormously.</div></div><div class="close-btn" onclick="closeToolkit('disc')">&#10005;</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Listen without interrupting</div><div class="step-desc">Let them tell you what they need to. Do not ask lots of questions. Do not minimise. Do not share your own reactions in the moment.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Do not promise confidentiality</div><div class="step-desc">You cannot promise to keep this between you — and you must not. Tell them you are glad they told you and that you will need to take it further, but that you will handle it carefully.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Do not investigate yourself</div><div class="step-desc">Your role is to receive the disclosure and escalate it — not to start asking questions or forming conclusions.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Record what was said accurately</div><div class="step-desc">As soon as possible after — what they said, in their words as closely as you can recall, with the time and date.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><div class="step-title">Escalate promptly</div><div class="step-desc">To the registered manager, HR, or safeguarding lead depending on the nature of the disclosure. Do not sit on it overnight.</div></div></div>
+      </div>
+      <div class="info-box"><p><strong>Look after yourself too.</strong> Receiving a serious disclosure is emotionally demanding. After you have done what needs to be done, use your own supervision to process it. You are not expected to absorb this alone.</p></div>
+    </div>
+    <div id="tp-new" class="panel">
+      <div class="panel-header"><div><div class="panel-title">New to management</div><div class="panel-subtitle">The things nobody tells you when you step into your first management role in care.</div></div><div class="close-btn" onclick="closeToolkit('new')">&#10005;</div></div>
+      <div class="callout"><p><strong>Your relationship with the team changes.</strong> You may have been friends with people you now manage. That dynamic shifts — not because you have changed, but because your responsibilities have. Being liked and being respected are different things. In management you need the second more than the first.</p></div>
+      <div class="callout"><p><strong>Consistency matters more than you think.</strong> Your team watches how you treat different people. If you are flexible with one person and firm with another in the same situation, trust will erode quietly long before you realise it is happening.</p></div>
+      <div class="callout"><p><strong>You do not have to have all the answers.</strong> "I don't know but I'll find out" is a perfectly good answer. What your team needs is honesty and follow-through — not omniscience.</p></div>
+      <div class="callout"><p><strong>Deal with things early.</strong> Almost every situation that becomes a significant HR matter started as a small thing someone hoped would resolve itself. It rarely does. The earlier you address a concern, the easier it is to resolve informally.</p></div>
+      <div class="callout"><p><strong>Use your own supervision.</strong> Management is isolating in a way that frontline care is not. The problems land with you and often cannot be shared widely. Use your supervision with your own manager to think through difficult situations — that is what it is for.</p></div>
+      <div class="info-box"><p><strong>Remember why you were promoted.</strong> The skills that made you good at your previous role — your care for people, your attention to detail, your commitment to doing things right — are the same skills that will make you a good manager. Trust them.</p></div>
+    </div>
+  </div>
+
+  <!-- GENERAL RESOURCES -->
+  <div id="s-general" class="section">
+    <div class="section-head">General resources — for every member of the team</div>
+    <div class="resource-grid">
+      <div class="resource-card" id="gc-safe" onclick="openGeneral('safe')"><div class="role-card-accent" style="background:#185fa5"></div><div class="role-card-icon" style="background:var(--blue-bg)">&#128737;</div><div class="role-card-title">Safeguarding</div><div class="role-card-desc">Recognise, respond, record, and report — every time.</div><span class="role-card-badge" style="background:var(--blue-bg);color:var(--blue-text)">All staff</span></div>
+      <div class="resource-card" id="gc-records" onclick="openGeneral('records')"><div class="role-card-accent" style="background:#ba7517"></div><div class="role-card-icon" style="background:var(--amber-bg)">&#128221;</div><div class="role-card-title">Record keeping</div><div class="role-card-desc">What good records look like and why they matter.</div><span class="role-card-badge" style="background:var(--amber-bg);color:var(--amber-text)">All staff</span></div>
+      <div class="resource-card" id="gc-equality" onclick="openGeneral('equality')"><div class="role-card-accent" style="background:#534ab7"></div><div class="role-card-icon" style="background:#eeedfe">&#9878;</div><div class="role-card-title">Equality &amp; inclusion</div><div class="role-card-desc">Protected characteristics, inclusive practice, and fair treatment.</div><span class="role-card-badge" style="background:#eeedfe;color:#3c3489">All staff</span></div>
+      <div class="resource-card" id="gc-comms" onclick="openGeneral('comms')"><div class="role-card-accent" style="background:#3b6d11"></div><div class="role-card-icon" style="background:#eaf3de">&#128172;</div><div class="role-card-title">Communication</div><div class="role-card-desc">Communicating clearly with service users, families, and colleagues.</div><span class="role-card-badge" style="background:#eaf3de;color:#27500a">All staff</span></div>
+      <div class="resource-card" id="gc-mca" onclick="openGeneral('mca')"><div class="role-card-accent" style="background:var(--teal-dark)"></div><div class="role-card-icon" style="background:var(--teal-pale)">&#9878;</div><div class="role-card-title">Mental Capacity Act</div><div class="role-card-desc">Applying the MCA in day-to-day care and decision making.</div><span class="role-card-badge" style="background:var(--teal-pale);color:var(--teal-dark)">All staff</span></div>
+      <div class="resource-card" id="gc-wb" onclick="openGeneral('wb')"><div class="role-card-accent" style="background:#993c1d"></div><div class="role-card-icon" style="background:var(--red-bg)">&#128226;</div><div class="role-card-title">Whistleblowing</div><div class="role-card-desc">Speaking up about concerns — your right and your responsibility.</div><span class="role-card-badge" style="background:var(--red-bg);color:var(--red-text)">All staff</span></div>
+    </div>
+    <div id="gp-safe" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Safeguarding</div><div class="panel-subtitle">Everyone has a responsibility to safeguard the people we support. This belongs to every member of staff, every day.</div></div><div class="close-btn" onclick="closeGeneral('safe')">&#10005;</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Recognise</div><div class="step-desc">Know the types of abuse — physical, emotional, financial, sexual, neglect, institutional, and modern slavery. Know the signs: unexplained injuries, withdrawal, changes in behaviour, financial irregularities.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Respond</div><div class="step-desc">If a service user discloses something, listen carefully. Do not promise confidentiality. Do not ask leading questions. Do not investigate — your role is to hear and report.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Record</div><div class="step-desc">Write down exactly what was said or observed as soon as possible, in the person's own words. Do not interpret or summarise.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Report</div><div class="step-desc">Report to your manager immediately. If there is immediate risk to life, call 999 first. Safeguarding concerns must never wait until the end of a shift.</div></div></div>
+      </div>
+      <div class="info-box"><p><strong>Remember:</strong> You do not need proof to raise a concern. Something feeling wrong is enough. It is not your job to decide whether abuse has occurred — report what you have seen or heard and let the right people make that determination.</p></div>
+    </div>
+    <div id="gp-records" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Record keeping</div><div class="panel-subtitle">Good records protect the people we support, protect staff, and demonstrate the quality of our care.</div></div><div class="close-btn" onclick="closeGeneral('records')">&#10005;</div></div>
+      <div class="callout"><p>Records must be written at the time or as soon as possible after — factual, objective, free from opinion and jargon, and signed with your full name, date, and time.</p></div>
+      <div class="info-box"><p><strong>The test:</strong> Could a colleague who has never met this person deliver safe, person-centred care based solely on what you have written? If not, it needs more detail.</p></div>
+      <div class="callout"><p>"Raised her voice, paced the room, and declined her medication three times" is a record. "Appeared agitated" is an opinion.</p></div>
+      <div class="warn-box"><p><strong>Poor records are one of the most common findings in CQC inspections</strong> and the first thing reviewed in a safeguarding enquiry or legal challenge.</p></div>
+    </div>
+    <div id="gp-equality" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Equality &amp; inclusion</div><div class="panel-subtitle">Fair treatment is not a policy — it is how we work, every day, with every person.</div></div><div class="close-btn" onclick="closeGeneral('equality')">&#10005;</div></div>
+      <div class="callout"><p>The Equality Act 2010 protects nine characteristics: age, disability, gender reassignment, marriage and civil partnership, pregnancy and maternity, race, religion or belief, sex, and sexual orientation.</p></div>
+      <div class="callout"><p>Inclusive practice means actively checking whether our policies and day-to-day behaviours create barriers for any individual or group — and taking steps to remove them.</p></div>
+      <div class="callout"><p>When making care decisions, consider whether a person's protected characteristics are being appropriately taken into account — religious dietary requirements, gender preferences for personal care, communication needs related to disability.</p></div>
+      <div class="info-box"><p><strong>In people processes:</strong> Before taking any formal action, consider whether a protected characteristic could be a factor. If it could be, take advice before proceeding.</p></div>
+    </div>
+    <div id="gp-comms" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Communication</div><div class="panel-subtitle">How we communicate shapes how people experience the service — and how much they trust us.</div></div><div class="close-btn" onclick="closeGeneral('comms')">&#10005;</div></div>
+      <div class="callout"><p>With service users: use plain language, check understanding, do not rush, and be led by the person's preferred communication method.</p></div>
+      <div class="callout"><p>With families: be honest, calm, and factual. Do not speculate or make promises you cannot keep. If a family member is distressed, listen first and escalate if needed.</p></div>
+      <div class="callout"><p>With colleagues: be direct and respectful. If you have a concern about someone's practice, raise it — directly or with your manager. Concerns that circulate without being raised formally do not get resolved.</p></div>
+      <div class="callout"><p>With professionals: be concise and factual. They need the person's name, date of birth, the concern, and what you need — not a lengthy narrative.</p></div>
+    </div>
+    <div id="gp-mca" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Mental Capacity Act</div><div class="panel-subtitle">The MCA 2005 protects people's right to make their own decisions — and sets out how to act when they cannot.</div></div><div class="close-btn" onclick="closeGeneral('mca')">&#10005;</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Presume capacity</div><div class="step-desc">Every adult has the right to make their own decisions unless it is established they lack capacity. Always start here.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Support the person to decide</div><div class="step-desc">Take all practicable steps to help someone decide for themselves before concluding they cannot.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Respect unwise decisions</div><div class="step-desc">A person has the right to make decisions others might consider unwise. An unusual choice does not mean someone lacks capacity.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div><div class="step-title">Act in best interests</div><div class="step-desc">Any decision made on behalf of someone lacking capacity must be in their best interests — considering their past wishes, values, and the views of those close to them.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div><div class="step-title">Least restrictive option</div><div class="step-desc">Always consider whether there is a less restrictive way to achieve the same outcome. Restriction must be proportionate and justified.</div></div></div>
+      </div>
+      <div class="warn-box"><p><strong>Deprivation of Liberty:</strong> If restrictions on a person's freedom are necessary for their safety and they lack capacity, a DoLS authorisation may be required. Speak to your manager if you believe this applies.</p></div>
+    </div>
+    <div id="gp-wb" class="panel">
+      <div class="panel-header"><div><div class="panel-title">Whistleblowing</div><div class="panel-subtitle">Speaking up is not disloyalty — it is one of the most important things any member of staff can do.</div></div><div class="close-btn" onclick="closeGeneral('wb')">&#10005;</div></div>
+      <div class="callout"><p>Whistleblowing means raising a concern about wrongdoing or risk that affects others — unsafe care, fraud, illegal activity, harm to a service user, or any attempt to cover these up.</p></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><div class="step-title">Raise it internally first</div><div class="step-desc">Speak to your manager. If the concern involves your manager, go to a more senior leader. Most concerns should be resolved within the organisation.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div><div class="step-title">Use the whistleblowing policy</div><div class="step-desc">If you are not comfortable raising it verbally, raise it in writing. The policy sets out how it is handled and who responds.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div><div class="step-title">Escalate externally if needed</div><div class="step-desc">If your concern has not been taken seriously internally, you can contact CQC, the local authority, or the NHS. You are protected by law for raising a genuine concern in good faith.</div></div></div>
+      </div>
+      <div class="info-box"><p><strong>Your protection:</strong> The Public Interest Disclosure Act 1998 protects workers who raise genuine concerns in good faith. You must not be dismissed, disciplined, or treated unfairly for raising a concern.</p></div>
+      <div class="alert-box"><p><strong>If a service user is at immediate risk:</strong> call 999 and report to your manager immediately. Do not wait for a formal process.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function goMain(id, el) {
+    document.querySelectorAll('.main-nav-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('s-' + id).classList.add('active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.role-card, .process-card, .toolkit-card, .resource-card').forEach(c => c.classList.remove('active'));
+  }
+  function openRole(id) {
+    document.querySelectorAll('#s-roles .panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('rp-' + id).classList.add('active');
+    document.getElementById('rc-' + id).classList.add('active');
+    setTimeout(() => document.getElementById('rp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeRole(id) {
+    document.getElementById('rp-' + id).classList.remove('active');
+    document.getElementById('rc-' + id).classList.remove('active');
+  }
+  function openProcess(id) {
+    document.querySelectorAll('#s-people .panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.process-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('pp-' + id).classList.add('active');
+    document.getElementById('pc-' + id).classList.add('active');
+    setTimeout(() => document.getElementById('pp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeProcess(id) {
+    document.getElementById('pp-' + id).classList.remove('active');
+    document.getElementById('pc-' + id).classList.remove('active');
+  }
+  function openToolkit(id) {
+    document.querySelectorAll('#s-toolkit .panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.toolkit-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('tp-' + id).classList.add('active');
+    document.getElementById('tc-' + id).classList.add('active');
+    setTimeout(() => document.getElementById('tp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeToolkit(id) {
+    document.getElementById('tp-' + id).classList.remove('active');
+    document.getElementById('tc-' + id).classList.remove('active');
+  }
+  function openGeneral(id) {
+    document.querySelectorAll('#s-general .panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.resource-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('gp-' + id).classList.add('active');
+    document.getElementById('gc-' + id).classList.add('active');
+    setTimeout(() => document.getElementById('gp-' + id).scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeGeneral(id) {
+    document.getElementById('gp-' + id).classList.remove('active');
+    document.getElementById('gc-' + id).classList.remove('active');
+  }
+  function goSub(btn, id) {
+    var panel = btn.closest('.panel');
+    panel.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    panel.querySelectorAll('.tab-body').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+  function goSubT(btn, id) {
+    var panel = btn.closest('.panel');
+    panel.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    panel.querySelectorAll('.tab-body').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+  function goMit(btn, id) {
+    var panel = btn.closest('.panel');
+    panel.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    panel.querySelectorAll('.mit-content').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+  function toggleScenario(btn) {
+    var answer = btn.nextElementSibling;
+    var arrow = btn.querySelector('.scenario-arrow');
+    var label = btn.querySelector('.scenario-btn-label');
+    var isOpen = answer.classList.contains('open');
+    answer.classList.toggle('open', !isOpen);
+    arrow.classList.toggle('open', !isOpen);
+    label.textContent = isOpen ? 'Show guidance' : 'Hide guidance';
+  }
+</script>
+</body>
+</html>
