@@ -560,7 +560,7 @@
         <div class="warn-box"><p>If a grievance is found to contain intentionally untrue allegations, or if a colleague is treated unfairly because they raised a legitimate concern, this may be dealt with under the disciplinary process.</p></div>
       </div>
     </div>
-    <div id="pp-mit" class="panel"> class="panel">
+    <div id="pp-mit" class="panel">
       <div class="panel-header"><div><div class="panel-title">Mitigating circumstances</div><div class="panel-subtitle">Two people can make the same mistake and receive different outcomes. That is fairness, not inconsistency.</div></div><div class="close-btn" onclick="closeProcess('mit')">&#10005;</div></div>
       <div class="sub-tabs">
         <button class="sub-tab active" onclick="goMit(this,'mit-what')">What counts</button>
@@ -766,6 +766,7 @@
     document.getElementById('rp-' + id).classList.add('active');
     document.getElementById('rc-' + id).classList.add('active');
     sendHeight();
+    sendScroll(document.getElementById('rp-' + id));
   }
   function closeRole(id) {
     document.getElementById('rp-' + id).classList.remove('active');
@@ -777,6 +778,7 @@
     document.getElementById('pp-' + id).classList.add('active');
     document.getElementById('pc-' + id).classList.add('active');
     sendHeight();
+    sendScroll(document.getElementById('pp-' + id));
   }
   function closeProcess(id) {
     document.getElementById('pp-' + id).classList.remove('active');
@@ -788,6 +790,7 @@
     document.getElementById('tp-' + id).classList.add('active');
     document.getElementById('tc-' + id).classList.add('active');
     sendHeight();
+    sendScroll(document.getElementById('tp-' + id));
   }
   function closeToolkit(id) {
     document.getElementById('tp-' + id).classList.remove('active');
@@ -799,6 +802,7 @@
     document.getElementById('gp-' + id).classList.add('active');
     document.getElementById('gc-' + id).classList.add('active');
     sendHeight();
+    sendScroll(document.getElementById('gp-' + id));
   }
   function closeGeneral(id) {
     document.getElementById('gp-' + id).classList.remove('active');
@@ -840,6 +844,15 @@
       var height = document.body.scrollHeight;
       window.parent.postMessage({ type: 'resize', height: height }, '*');
     }, 100);
+  }
+  function sendScroll(el) {
+    setTimeout(function() {
+      if (!el) return;
+      var rect = el.getBoundingClientRect();
+      var iframeTop = window.frameElement ? window.frameElement.getBoundingClientRect().top : 0;
+      var scrollTo = rect.top + window.scrollY + iframeTop - 80;
+      window.parent.postMessage({ type: 'scroll', top: scrollTo }, '*');
+    }, 150);
   }
   window.addEventListener('load', sendHeight);
 </script>
